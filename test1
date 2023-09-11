@@ -1,0 +1,84 @@
+from flask import Flask, render_template, jsonify
+import requests
+import urllib3
+import time
+
+urllib3.disable_warnings()
+
+#app = Flask(__name__)
+app = Flask(__name__, template_folder='template')
+
+url = 'https://iot.research.hamk.fi/api/v1/hamk/rooms/tsdata?room-id=7&startTime=2023-02-01T00:00:00Z&endTime=2030-06-07T12:30:00Z&fields=temperature,humidity,co2,light,motion,vdd'
+headers = {
+    'x-api-key': 'II6dsQDctGjWeoHgnT5wPjXlyJVmmUbvASnh2Zay',
+}
+
+def fetch_data():
+    try:
+        response = requests.get(url, headers=headers, verify=False)
+        response.raise_for_status()
+        data = response.json()
+        values_array = data["results"][0]["series"][0]["values"]
+        return values_array
+    except Exception as e:
+        print(f"Error fetching data: {str(e)}")
+        return []
+
+@app.route('/index.html')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/data')
+def get_data():
+    values_array = fetch_data()
+    return jsonify(values_array)
+
+if __name__ == '__main__':
+    app.run(debug=True, threaded=True)
+
+# from flask import Flask, render_template, jsonify
+# import requests
+# import urllib3
+# import time
+
+# app = Flask(__name__)
+# urllib3.disable_warnings()
+
+# url = 'https://iot.research.hamk.fi/api/v1/hamk/rooms/tsdata?room-id=7&startTime=2023-02-01T00:00:00Z&endTime=2030-06-07T12:30:00Z&fields=temperature,humidity,co2,light,motion,vdd'
+# headers = {
+#     'x-api-key': 'II6dsQDctGjWeoHgnT5wPjXlyJVmmUbvASnh2Zay',
+# }
+
+# def fetch_data():
+#     response = requests.get(url, headers=headers, verify=False)
+#     response.raise_for_status()
+#     data = response.json()
+#     values_array = data["results"][0]["series"][0]["values"]
+#     return values_array
+
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
+
+# @app.route('/api/data')
+# def get_data():
+#     values_array = fetch_data()
+#     return jsonify(values_array)
+
+# def newData():
+#     while True:
+#         data = fetch_data()
+#         values_array = sorted(data, key=lambda x: x[0])
+#         newest_data = values_array[-1]
+#         newest_time = newest_data[0]
+#         newest_temperature = newest_data[1]
+#         newest_humidity = newest_data[2]
+#         newest_Co2 = newest_data[3]
+#         newest_light = newest_data[4]
+#         newest_motion = newest_data[5]
+#         newest_vdd = newest_data[6]
+#         print(f"Newest Time: {newest_time}, Newest Temperature: {newest_temperature}, Newest humidity: {newest_humidity}, Newest Co2: {newest_Co2}, Newest light: {newest_light}, Newest Motion: {newest_motion}, Newest vdd: {newest_vdd}")
+#         time.sleep(6)
+
+# if __name__ == '__main__':
+#     app.run(debug=True, threaded=True)
