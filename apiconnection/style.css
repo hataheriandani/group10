@@ -1,0 +1,75 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+/* Header Styles */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Button Styles */
+.btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Table Styles */
+#table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #fff;
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+}
+
+/* Chart Styles */
+.chart-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 768px) {
+    /* Adjust the layout for tablets and larger screens */
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+}
+
+@media (max-width: 767px) {
+    /* Adjust the layout for smaller screens (e.g., mobile phones) */
+    .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .chart-container {
+        margin-top: 10px;
+    }
+}
