@@ -17,3 +17,4 @@ schedule.every(15).minutes.do(update_data)
 while True:
     schedule.run_pending()
     time.sleep(1)
+# g 10
