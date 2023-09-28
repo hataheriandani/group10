@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display data</title>
+</head>
+<body>
+    <h1>Choose room and time:</h1>
+<form method="post" action="/">
+    <label for="room_id">Room Id</label>
+    <input type="text" id="room_id" name="room_id" required>
+    <br>
+    <label for="start_time"> Start time:</label>
+    <input type="text" id="start_time" name="start_time" placeholder="2023-02-01T00:00:00,000Z" required>
+    <br>
+    <input type="submit" value="Request for Information">
+</form>
+
+
+    {% if data %}
+    <h1>Information table:</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                {% for column in data["columns"] %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data["values"] %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No information available. Please enter the room ID.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>نمایش اطلاعات به شکل جدول</title>
+</head>
+<body>
+    <h1>انتخاب اتاق:</h1>
+    <form method="post" action="/">
+        <label for="room_id">شناسه اتاق:</label>
+        <input type="text" id="room_id" name="room_id" required>
+        <input type="submit" value="درخواست اطلاعات">
+    </form>
+
+    {% if data %}
+    <h1>جدول اطلاعات:</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>شناسه</th>
+                <th>دما</th>
+                <th>رطوبت</th>
+                <th>CO2</th>
+                <th>نور</th>
+                <th>حرکت</th>
+                <th>VDD</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.temperature }}</td>
+                    <td>{{ item.humidity }}</td>
+                    <td>{{ item.co2 }}</td>
+                    <td>{{ item.light }}</td>
+                    <td>{{ item.motion }}</td>
+                    <td>{{ item.vdd }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>هیچ اطلاعاتی موجود نیست. لطفاً شناسه اتاق را وارد کنید.</p>
+    {% endif %}
+</body>
+</html>
