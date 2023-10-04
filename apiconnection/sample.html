@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby Data Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 24px;
+        }
+
+        .dashboard-container {
+            max-width: 100%;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .line-chart-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Added style to make the line chart container smaller */
+        #line-chart {
+            max-width: 1000px;
+            height: 600px !important;
+        }
+    </style>
+</head>
+<body>
+<h1> Lobby Data Dashboard</h1>
+
+<div class="dashboard-container">
+    <h2>looby  Data for Last 6 Hours</h2>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Room</th>
+                <th>Time</th>
+                <th>CO2 (ppm)</th>
+                <th>Humidity (%)</th>
+                <th>Temperature (°C)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be generated dynamically -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Container for Line Chart -->
+<div class="dashboard-container line-chart-container">
+    <h2>Line Chart</h2>
+    <canvas id="line-chart"></canvas>
+</div>
+
+<script>
+    async function fetchDataForRooms(roomIds) {
+        try {
+            const endTime = new Date();
+            const startTime = new Date(endTime.getTime() - 2 * 60 * 60 * 1000); // Last 6 hours
+            const startTimeStr = startTime.toISOString();
+            const endTimeStr = endTime.toISOString();
+
+            // Replace 'YOUR_API_KEY' with your actual API key
+            const apiKey = 'II6dsQDctGjWeoHgnT5wPjXlyJVmmUbvASnh2Zay';
+
+            const roomDataPromises = roomIds.map(async (roomId) => {
+                const apiUrl = `https://iot.research.hamk.fi/api/v1/hamk/rooms/tsdata?room-id=${roomId}&startTime=${startTimeStr}&endTime=${endTimeStr}&fields=temperature,humidity,co2`;
+
+                const headers = new Headers({
+                    "x-api-key": apiKey,
+                    "Content-Type": "application/json",
+                });
+
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: headers,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const responseData = await response.json();
+                const seriesData = responseData.results[0].series[0]; // Assuming the first series contains your data
+
+                if (Array.isArray(seriesData.values) && seriesData.values.length > 0) {
+                    return { roomId, data: seriesData.values }; // Returning the time series data and room ID
+                } else {
+                    console.error("API response does not contain valid time series data or is empty:", seriesData);
+                    return null;
+                }
+            });
+
+            const roomDataArray = await Promise.all(roomDataPromises);
+
+            // Filter out null data
+            const validRoomData = roomDataArray.filter(roomData => roomData !== null);
+
+            return validRoomData;
+        } catch (error) {
+            console.error("Error fetching data for rooms:", error);
+            return [];
+        }
+    }
+
+    async function updateDataForRooms(roomIds, locationNames) {
+        const roomDataArray = await fetchDataForRooms(roomIds);
+        if (roomDataArray.length > 0) {
+            const dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+
+            // Clear existing table rows
+            dataTable.innerHTML = '';
+
+            // Initialize data arrays for line chart
+            const timeLabels = [];
+            const co2Data = [];
+            const humidityData = [];
+            const temperatureData = [];
+
+            // Populate the table and update data arrays for the line chart
+            roomDataArray.forEach((roomData, index) => {
+                const roomName = locationNames[index];
+
+                roomData.data.forEach((dataPoint) => {
+                    const [timestamp, temperature, humidity, co2] = dataPoint;
+
+                    // Format the timestamp to display as time
+                    const formattedTime = new Date(timestamp).toLocaleTimeString();
+
+                    // Add data to the table
+                    const newRow = dataTable.insertRow(dataTable.rows.length);
+                    newRow.insertCell(0).textContent = roomName;
+                    newRow.insertCell(1).textContent = formattedTime;
+                    newRow.insertCell(2).textContent = co2.toFixed(2);
+                    newRow.insertCell(3).textContent = humidity.toFixed(2);
+                    newRow.insertCell(4).textContent = temperature.toFixed(2);
+
+                    // Update data arrays for the line chart
+                    timeLabels.push(formattedTime);
+                    co2Data.push(co2.toFixed(2));
+                    humidityData.push(humidity.toFixed(2));
+                    temperatureData.push(temperature.toFixed(2));
+                });
+            });
+
+            // Create or update the line chart
+            createLineChart("line-chart", "Room Data for Last 6 Hours", timeLabels, co2Data, humidityData, temperatureData);
+        }
+    }
+
+    function createLineChart(canvasId, chartLabel, timeLabels, co2Data, humidityData, temperatureData) {
+        const ctxLine = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'CO2 (ppm)',
+                    data: co2Data,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: false,
+                }, {
+                    label: 'Humidity (%)',
+                    data: humidityData,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: false,
+                }, {
+                    label: 'Temperature (°C)',
+                    data: temperatureData,
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                   
+                    borderWidth: 1,
+                    fill: false,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Time',
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Value',
+                        },
+                    },
+                },
+            },
+        });
+    }
+
+    // Room IDs and location names
+    const roomIds = ["7", "14", "15"];
+    const locationNames = [
+        "Room 7",
+        "Room 14(cloakroom)",
+        "Room 15"
+    ];
+
+    // Update data and charts at regular intervals
+    async function updateDataAndCharts() {
+        // Fetch and update data for hotel rooms
+        await updateDataForRooms(roomIds, locationNames);
+
+        // Update the data and charts at regular intervals (e.g., every 5 minutes)
+        const refreshIntervalMinutes = 5;
+        setTimeout(updateDataAndCharts, refreshIntervalMinutes * 60 * 1000);
+    }
+
+    // Initial data update and chart creation
+    updateDataAndCharts();
+</script>
+</body>
+</html>
