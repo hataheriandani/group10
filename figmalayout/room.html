@@ -161,7 +161,7 @@
             const startTimeStr = startTime.toISOString();
             const endTimeStr = endTime.toISOString();
 
-            // Replace 'YOUR_API_KEY' with your actual API key
+            // 'API_KEY' with your actual API key
             const apiKey = 'II6dsQDctGjWeoHgnT5wPjXlyJVmmUbvASnh2Zay';
 
             const roomDataPromises = roomIds.map(async (roomId) => {
@@ -392,6 +392,16 @@ function createLineChart(canvasId, chartLabel, dataValues, labels, timeLabels) {
                 data: dataValues[index],  // Data values for the Y-axis (e.g., temperature or humidity data)
                 borderColor: 'rgba(75, 192, 192, 1)', // Line color (you can change this)
                 borderWidth: 2,  // Line width
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)',
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+            ],
                 fill: false,  // Don't fill the area under the line
             })),
         },
