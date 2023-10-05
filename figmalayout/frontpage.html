@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pie Chart with Circular Element</title>
+    <!-- Include Chart.js and chartjs-plugin-datalabels libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        /* Style for the body */
+        body {
+            background-color: #f0f0f0; /* Background color for the entire page */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Style for the navigation bar */
+        .navbar {
+            background-color: #333333;
+            overflow: hidden;
+            text-align: center; /* Center the text horizontally */
+            width: 100%;
+        }
+
+        /* Style for the navigation bar links */
+        .navbar a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        /* Style for the navigation bar links on hover */
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Style for the container div */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center; /* Center vertically */
+            padding: 20px;
+        }
+
+        /* Style for each box */
+        .box {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            border: 1px solid #ccc;
+            margin: 5px; /* Small margin between boxes */
+            padding: 20px;
+            border-radius: 15px; /* Rounded corners */
+            background-color: #ffffff; /* Background color for the boxes */
+            display: flex; /* Add display: flex */
+            flex-direction: column; /* Stack elements vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+        }
+
+        /* Style for the box header */
+        .box-header {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Style for the circular element */
+        .circular-element {
+            position: absolute;
+            top: 63%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background-color: #ffffff; /* Match background color */
+            border-radius: 50%; /* Make it circular */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        .circular-element2 {
+            position: absolute;
+            top: 57%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            background-color: #ffffff; /* Match background color */
+            border-radius: 50%; /* Make it circular */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        .circular-element3 {
+            position: absolute;
+            top: 57%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px;
+            height: 140px;
+            background-color: #ffffff; /* Match background color */
+            border-radius: 50%; /* Make it circular */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        /* Style for the section label as a link */
+        .section-label {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+            display: block; /* Ensure it takes up the full width */
+            color: #0000FF; /* Blue color for links */
+            text-decoration: underline; /* Add underlines to indicate links */
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        .circular-link {
+            text-decoration: none; /* Remove underlines from the link */
+            color: black; /* Set link color */
+        }
+
+        /* Style for the 2x2 grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns with equal width */
+            gap: 20px; /* Gap between grid items */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="#">Live Data</a>
+        <a href="#">Data History</a>
+    </div>
+
+    <div class="container grid">
+        <div class="box">
+            <canvas id="chart1"></canvas>
+            <div class="circular-element">
+                <a href="hotelRooms.html" class="circular-link">
+                    <div class="circular-text">Hotel Rooms</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="box">
+            <canvas id="chart2"></canvas>
+            <div class="circular-element2">
+                <a href="restaurants.html" class="circular-link">
+                    <div class="circular-text">Restaurants</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="box">
+            <canvas id="chart3"></canvas>
+            <div class="circular-element2">
+                <a href="lobby.html" class="circular-link">
+                    <div class="circular-text">Lobbies</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="box">
+            <canvas id="chart4"></canvas>
+            <div class="circular-element3">
+                <a href="meetinrooms.html" class="circular-link">
+                    <div class="circular-text">Meeting Rooms</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for the pie chart
+        const data1 = {
+            labels: ['Room 209', 'Room 109', 'Room 307', 'Room 129', 'Room 126', 'Room 229', 'Room 226', 'Room 326'],
+            datasets: [{
+                data: [1, 1, 1, 1, 1, 1, 1, 1], // Equal values for all sections
+                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)', 'rgb(255, 255, 0)', 'rgb(255, 0, 255)', 'rgb(0, 255, 255)', 'rgb(128, 128, 0)', 'rgb(128, 0, 128)'],
+            }]
+        };
+
+        const data2 = {
+            labels: ['Restaurant Hall', 'Lower restaurant', 'Upper restaurant stage right side'],
+            datasets: [{
+                data: [1, 1, 1], // Equal values for all sections
+                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'],
+            }]
+        };
+        const data3 = {
+            labels: ['Lobby', 'Lower lobby cloakroom', '2.nd floor lobby space'],
+            datasets: [{
+                data: [1, 1, 1], // Equal values for all sections
+                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'],
+            }]
+        };
+        const data4 = {
+            labels: ['Vuolle 1 meetingroom', 'Linno 1 and 2 meetingroom'],
+            datasets: [{
+                data: [1, 1], // Equal values for all sections
+                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)'],
+            }]
+        };
+
+
+        // Create pie chart
+        const ctx1 = document.getElementById('chart1').getContext('2d');
+        const chart1 = createPieChart(ctx1, data1);
+
+        // Duplicate the data for other charts
+        const ctx2 = document.getElementById('chart2').getContext('2d');
+        const chart2 = createPieChart2(ctx2, data2);
+
+        const ctx3 = document.getElementById('chart3').getContext('2d');
+        const chart3 = createPieChart3(ctx3, data3);
+
+        const ctx4 = document.getElementById('chart4').getContext('2d');
+        const chart4 = createPieChart4(ctx4, data4);
+
+        // Add circular elements inside the pie charts (if needed)
+
+        function createPieChart(ctx, data) {
+            return new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    plugins: {
+                        tooltip: {
+                            enabled: false // Disable tooltips
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements && elements.length > 0) {
+                            const segmentIndex = elements[0].index;
+                            const sectionUrls = [
+                                'https://example.com/room209',
+                                'https://example.com/room109',
+                                'https://example.com/room307',
+                                'https://example.com/room129',
+                                'https://example.com/room126',
+                                'https://example.com/room229',
+                                'https://example.com/room226',
+                                'https://example.com/room326',
+                            ];
+                            window.open(sectionUrls[segmentIndex], '_blank');
+                        }
+                    },
+                }
+            });
+        }
+        function createPieChart2(ctx, data) {
+            return new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    plugins: {
+                        tooltip: {
+                            enabled: false // Disable tooltips
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements && elements.length > 0) {
+                            const segmentIndex = elements[0].index;
+                            const sectionUrls = [
+                                'https://example.com/restaurant_hall',
+                                'https://example.com/lower_restaurant',
+                                'https://example.com/upper_restaurant',
+                            ];
+                            window.open(sectionUrls[segmentIndex], '_blank');
+                        }
+                    },
+                }
+            });
+        }
+        function createPieChart3(ctx, data) {
+            return new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    plugins: {
+                        tooltip: {
+                            enabled: false // Disable tooltips
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements && elements.length > 0) {
+                            const segmentIndex = elements[0].index;
+                            const sectionUrls = [
+                                'https://example.com/lobby',
+                                'https://example.com/lower_lobby',
+                                'https://example.com/2nd_lobby',
+                            ];
+                            window.open(sectionUrls[segmentIndex], '_blank');
+                        }
+                    },
+                }
+            });
+        }
+        function createPieChart4(ctx, data) {
+            return new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    plugins: {
+                        tooltip: {
+                            enabled: false // Disable tooltips
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements && elements.length > 0) {
+                            const segmentIndex = elements[0].index;
+                            const sectionUrls = [
+                                'https://example.com/vuolle1',
+                                'https://example.com/linno1_and_2',
+                            ];
+                            window.open(sectionUrls[segmentIndex], '_blank');
+                        }
+                    },
+                }
+            });
+        }
+    </script>
+</body>
+</html>
