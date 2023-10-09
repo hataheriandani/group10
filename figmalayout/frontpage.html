@@ -59,7 +59,7 @@
             margin: 5px; /* Small margin between boxes */
             padding: 20px;
             border-radius: 15px; /* Rounded corners */
-            background-color: #ffffff; /* Background color for the boxes */
+            background-color: #b7b6b7; /* Background color for the boxes */
             display: flex; /* Add display: flex */
             flex-direction: column; /* Stack elements vertically */
             justify-content: center; /* Center vertically */
@@ -94,7 +94,7 @@
             transform: translate(-50%, -50%);
             width: 130px;
             height: 130px;
-            background-color: #ffffff; /* Match background color */
+            background-color: #f2e8e8; /* Match background color */
             border-radius: 50%; /* Make it circular */
             display: flex;
             justify-content: center; /* Center horizontally */
@@ -185,10 +185,18 @@
     <script>
         // Sample data for the pie chart
         const data1 = {
-            labels: ['Room 209', 'Room 109', 'Room 307', 'Room 129', 'Room 126', 'Room 229', 'Room 226', 'Room 326'],
+            labels: ['Room 209', 'Room 109', 'Room 307', 'Room 129', 'Room 126', 'Room 229', 'Room 226', 'Room 326','Room 327'],
             datasets: [{
                 data: [1, 1, 1, 1, 1, 1, 1, 1], // Equal values for all sections
-                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)', 'rgb(255, 255, 0)', 'rgb(255, 0, 255)', 'rgb(0, 255, 255)', 'rgb(128, 128, 0)', 'rgb(128, 0, 128)'],
+                backgroundColor: [  'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)',
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 0, 0, 0.5)',],
             }]
         };
 
@@ -196,21 +204,26 @@
             labels: ['Restaurant Hall', 'Lower restaurant', 'Upper restaurant stage right side'],
             datasets: [{
                 data: [1, 1, 1], // Equal values for all sections
-                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'],
+                backgroundColor: ['rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)',],
             }]
         };
         const data3 = {
             labels: ['Lobby', 'Lower lobby cloakroom', '2.nd floor lobby space'],
             datasets: [{
                 data: [1, 1, 1], // Equal values for all sections
-                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)'],
+                backgroundColor: ['rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)',
+                'rgba(255, 99, 132, 0.7)',],
             }]
         };
         const data4 = {
             labels: ['Vuolle 1 meetingroom', 'Linno 1 and 2 meetingroom'],
             datasets: [{
                 data: [1, 1], // Equal values for all sections
-                backgroundColor: ['rgb(255, 0, 0)', 'rgb(0, 255, 0)'],
+                backgroundColor: ['rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',],
             }]
         };
 
