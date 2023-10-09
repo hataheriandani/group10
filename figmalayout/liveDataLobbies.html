@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Lobby Data Dashboard</title>
+    <title>Hotel Meetingroom Data Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         body {
@@ -12,6 +12,29 @@
             padding: 0;
             background-color: #f0f0f0;
         }
+        .navbar {
+            background-color: #333333;
+            overflow: hidden;
+            text-align: center; /* Center the text horizontally */
+            width: 100%;
+            margin-bottom: 20px; /* Add margin at the bottom of the navbar */
+        }
+
+        /* Style for the navigation bar links */
+        .navbar a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        /* Style for the navigation bar links on hover */
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
 
         h1 {
             text-align: center;
@@ -100,14 +123,17 @@
     </style>
 </head>
 <body>
-<h1>Live Lobby Data Dashboard</h1>
+    <div class="navbar">
+        <a href="frontpage.html">Live Data</a>
+        <a href="#">Data History</a>
+    </div>
 
 <div class="dashboard-container">
-    <h2>Average Data for Hotel Lobby</h2>
+    <h2>Average Data for Hotel Meetingroom</h2>
     <table id="data-table">
         <thead>
         <tr>
-            <th>Room</th>
+            <th>Meetingroom</th>
             <th>Average Temperature (°C)</th>
             <th>Average Humidity (%)</th>
             <th>Average CO2 (ppm)</th>
@@ -154,7 +180,7 @@
 </div>
 
 <script>
-    async function fetchDataForLobby(roomIds) {
+    async function fetchDataForMeetingroom(roomIds) {
         try {
             const endTime = new Date();
             const startTime = new Date(endTime.getTime() - 6 * 60 * 60 * 1000); // current time to last 6 hours average data
@@ -199,13 +225,13 @@
 
             return validRoomData;
         } catch (error) {
-            console.error("Error fetching data for the lobby:", error);
+            console.error("Error fetching data for the  Meetingroom:", error);
             return [];
-        }
+        }                                                       
     }
 
-    async function updateDataForLobby(roomIds, locationNames) {
-        const roomDataArray = await fetchDataForLobby(roomIds);
+    async function updateDataForMeetingroom(roomIds, locationNames) {
+        const roomDataArray = await fetchDataForMeetingroom(roomIds);
         if (roomDataArray.length > 0) {
             const dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
 
@@ -335,18 +361,18 @@
         }
     }
 
-    // Room IDs and location names for the lobby
-    const roomIds = ['14', '7', '15']; // Replace with the IDs of the lobby rooms
+    // Room IDs and location names for the Meetingroom
+    const roomIds = ['13', '17', '23']; // Replace with the IDs of the Meetingroom rooms
     const locationNames = [
-        'Lower lobby cloakroom',
-        'Lower lobby',
-        '2.nd floor lobby space'
+    'uolle 1 meeting room',
+    'Linno 1 ja 2 neuvottelutila',
+    'Linno 1 ja 2 neuvottelutila'
     ]; // Replace with the corresponding room names
 
     // Update data and charts at regular intervals
     async function updateDataAndCharts() {
-        // Fetch and update data for the lobby
-        await updateDataForLobby(roomIds, locationNames);
+        // Fetch and update data for the Meetingroom
+        await updateDataForMeetingroom(roomIds, locationNames);
 
         // Update the data and charts at regular intervals (e.g., every 5 minutes)
         const refreshIntervalMinutes = 5;
@@ -431,7 +457,7 @@
 
     // Update line charts for CO2, humidity, and temperature
     async function updateLineCharts() {
-        const roomDataArray = await fetchDataForLobby(roomIds);
+        const roomDataArray = await fetchDataForMeetingroom(roomIds);
         if (roomDataArray.length > 0) {
             const { dataSeries: temperatureData, timeLabels } = extractDataSeries(
                 roomDataArray,

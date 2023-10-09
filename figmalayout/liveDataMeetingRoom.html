@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Room Data Dashboard</title>
+    <title>Hotel Meetingroom Data Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         body {
@@ -126,13 +126,14 @@
         <a href="frontpage.html">Live Data</a>
         <a href="#">Data History</a>
     </div>
+<h1>Live Meetingroom Data Dashboard</h1>
 
 <div class="dashboard-container">
-    <h2>Average Data for Hotel Rooms</h2>
+    <h2>Average Data for Hotel Meetingroom</h2>
     <table id="data-table">
         <thead>
         <tr>
-            <th>Room</th>
+            <th>Meetingroom</th>
             <th>Average Temperature (°C)</th>
             <th>Average Humidity (%)</th>
             <th>Average CO2 (ppm)</th>
@@ -163,7 +164,7 @@
 
 <!-- Container for Line Charts (Last 6 Hours) -->
 <div class="dashboard-container">
-    <h2>live data in Line Charts</h2>
+    <h2>Live Data in Line Charts</h2>
     <!-- Canvas for Temperature Line Chart -->
     <div class="line-chart-container">
         <canvas id="temperature-line-chart" width="800" height="400"></canvas>
@@ -179,7 +180,7 @@
 </div>
 
 <script>
-    async function fetchDataForRooms(roomIds) {
+    async function fetchDataForMeetingroom(roomIds) {
         try {
             const endTime = new Date();
             const startTime = new Date(endTime.getTime() - 6 * 60 * 60 * 1000); // current time to last 6 hours average data
@@ -224,13 +225,13 @@
 
             return validRoomData;
         } catch (error) {
-            console.error("Error fetching data for rooms:", error);
+            console.error("Error fetching data for the  Meetingroom:", error);
             return [];
-        }
+        }                                                       
     }
 
-    async function updateDataForRooms(roomIds, locationNames) {
-        const roomDataArray = await fetchDataForRooms(roomIds);
+    async function updateDataForMeetingroom(roomIds, locationNames) {
+        const roomDataArray = await fetchDataForMeetingroom(roomIds);
         if (roomDataArray.length > 0) {
             const dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
 
@@ -290,12 +291,6 @@
                         'rgba(255, 99, 132, 0.5)',
                         'rgba(54, 162, 235, 0.5)',
                         'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)',
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 0, 0, 0.5)',
                     ],
                 }],
             },
@@ -366,24 +361,18 @@
         }
     }
 
-    // Room IDs and location names
-    const roomIds = ["8", "10", "11", "18", "19", "20", "21", "22", "23"];
+    // Room IDs and location names for the Meetingroom
+    const roomIds = ['13', '17', '23']; // Replace with the IDs of the Meetingroom rooms
     const locationNames = [
-        "Hotel Room 209",
-        "Hotel Room 109",
-        "Hotel Room 307",
-        "Hotel Room 129",
-        "Hotel Room 126",
-        "Hotel Room 229",
-        "Hotel Room 226",
-        "Hotel Room 326",
-        "Hotel Room 327",
-    ];
+    'uolle 1 meeting room',
+    'Linno 1 ja 2 neuvottelutila',
+    'Linno 1 ja 2 neuvottelutila'
+    ]; // Replace with the corresponding room names
 
     // Update data and charts at regular intervals
     async function updateDataAndCharts() {
-        // Fetch and update data for hotel rooms
-        await updateDataForRooms(roomIds, locationNames);
+        // Fetch and update data for the Meetingroom
+        await updateDataForMeetingroom(roomIds, locationNames);
 
         // Update the data and charts at regular intervals (e.g., every 5 minutes)
         const refreshIntervalMinutes = 5;
@@ -406,110 +395,108 @@
         }
     });
 
-
-// Function to create and update line charts
-function createLineChart(canvasId, chartLabel, dataValues, labels, timeLabels) {
-    const ctxLine = document.getElementById(canvasId).getContext('2d');
-    new Chart(ctxLine, {
-        type: 'line',  // Specifies the chart type as a line chart
-        data: {
-            labels: timeLabels,  // Labels for the X-axis (time labels)
-            datasets: labels.map((label, index) => ({
-                label: label,  // Label for the dataset (room name)
-                data: dataValues[index],  // Data values for the Y-axis (e.g., temperature or humidity data)
-                borderColor: 'rgba(75, 192, 192, 1)', // Line color (you can change this)
-                borderWidth: 2,  // Line width
-                backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',
-                'rgba(54, 162, 235, 0.5)',
-                'rgba(255, 206, 86, 0.5)',
-                'rgba(75, 192, 192, 0.5)',
-                'rgba(153, 102, 255, 0.5)',
-                'rgba(255, 159, 64, 0.5)',
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 0, 0, 0.5)',
-            ],
-                fill: false,  // Don't fill the area under the line
-            })),
-        },
-        options: {
-            responsive: true,  // Make the chart responsive to the container size
-            maintainAspectRatio: false,  // Don't maintain aspect ratio
-            plugins: {
-                title: {
-                    display: true,  // Display a title for the chart
-                    text: chartLabel,  // The title text (e.g., "Temperature (Last 6 Hours)")
-                    fontSize: 16,  // Font size for the title
+    // Function to create and update line charts
+    function createLineChart(canvasId, chartLabel, dataValues, labels, timeLabels) {
+        const ctxLine = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',  // Specifies the chart type as a line chart
+            data: {
+                labels: timeLabels,  // Labels for the X-axis (time labels)
+                datasets: labels.map((label, index) => ({
+                    label: label,  // Label for the dataset (room name)
+                    data: dataValues[index],  // Data values for the Y-axis (e.g., temperature or humidity data)
+                    borderColor: 'rgba(75, 192, 192, 1)', // Line color (you can change this)
+                    borderWidth: 2,  // Line width
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 0, 0, 0.5)',
+                    ],
+                    fill: false,  // Don't fill the area under the line
+                })),
+            },
+            options: {
+                responsive: true,  // Make the chart responsive to the container size
+                maintainAspectRatio: false,  // Don't maintain aspect ratio
+                plugins: {
+                    title: {
+                        display: true,  // Display a title for the chart
+                        text: chartLabel,  // The title text (e.g., "Temperature (Last 6 Hours)")
+                        fontSize: 16,  // Font size for the title
+                    },
                 },
             },
-        },
-    });
-}
-
-// Function to extract data series for line charts
-function extractDataSeries(roomDataArray, fieldIndex) {
-    const dataSeries = [];
-    const timeLabels = [];
-
-    roomDataArray.forEach((roomData) => {
-        const data = roomData.data.map((point) => point[fieldIndex]);
-        dataSeries.push(data);
-    });
-
-    // Assuming all rooms have the same timestamps
-    if (roomDataArray.length > 0) {
-        timeLabels.push(
-            ...roomDataArray[0].data.map((point) => new Date(point[0]).toLocaleTimeString())
-        );
-    }
-
-    return { dataSeries, timeLabels };
-}
-
-// Update line charts for CO2, humidity, and temperature
-async function updateLineCharts() {
-    const roomDataArray = await fetchDataForRooms(roomIds);
-    if (roomDataArray.length > 0) {
-        const { dataSeries: temperatureData, timeLabels } = extractDataSeries(
-            roomDataArray,
-            1 // Temperature field index
-        );
-        const { dataSeries: humidityData } = extractDataSeries(
-            roomDataArray,
-            2 // Humidity field index
-        );
-        const { dataSeries: co2Data } = extractDataSeries(
-            roomDataArray,
-            3 // CO2 field index
-        );
-
-        createLineChart("temperature-line-chart", "Temperature (Last 6 Hours)", temperatureData, locationNames, timeLabels);
-        createLineChart("humidity-line-chart", "Humidity (Last 6 Hours)", humidityData, locationNames, timeLabels);
-        createLineChart("co2-line-chart", "CO2 (Last 6 Hours)", co2Data, locationNames, timeLabels);
-    }
-}
-
-// Initial line chart update
-updateLineCharts();
-
-// Update line charts at regular intervals
-const refreshIntervalMinutes = 5;
-setInterval(updateLineCharts, refreshIntervalMinutes * 60 * 1000);
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Request notification permission when the page loads
-    if (Notification.permission !== 'granted') {
-        Notification.requestPermission().then(function (permission) {
-            if (permission === 'granted') {
-                console.log('Notification permission granted.');
-            } else {
-                console.error('Notification permission denied.');
-            }
         });
     }
-});
 
+    // Function to extract data series for line charts
+    function extractDataSeries(roomDataArray, fieldIndex) {
+        const dataSeries = [];
+        const timeLabels = [];
+
+        roomDataArray.forEach((roomData) => {
+            const data = roomData.data.map((point) => point[fieldIndex]);
+            dataSeries.push(data);
+        });
+
+        // Assuming all rooms have the same timestamps
+        if (roomDataArray.length > 0) {
+            timeLabels.push(
+                ...roomDataArray[0].data.map((point) => new Date(point[0]).toLocaleTimeString())
+            );
+        }
+
+        return { dataSeries, timeLabels };
+    }
+
+    // Update line charts for CO2, humidity, and temperature
+    async function updateLineCharts() {
+        const roomDataArray = await fetchDataForMeetingroom(roomIds);
+        if (roomDataArray.length > 0) {
+            const { dataSeries: temperatureData, timeLabels } = extractDataSeries(
+                roomDataArray,
+                1 // Temperature field index
+            );
+            const { dataSeries: humidityData } = extractDataSeries(
+                roomDataArray,
+                2 // Humidity field index
+            );
+            const { dataSeries: co2Data } = extractDataSeries(
+                roomDataArray,
+                3 // CO2 field index
+            );
+
+            createLineChart("temperature-line-chart", "Temperature (Last 6 Hours)", temperatureData, locationNames, timeLabels);
+            createLineChart("humidity-line-chart", "Humidity (Last 6 Hours)", humidityData, locationNames, timeLabels);
+            createLineChart("co2-line-chart", "CO2 (Last 6 Hours)", co2Data, locationNames, timeLabels);
+        }
+    }
+
+    // Initial line chart update
+    updateLineCharts();
+
+    // Update line charts at regular intervals
+    const refreshIntervalMinutes = 5;
+    setInterval(updateLineCharts, refreshIntervalMinutes * 60 * 1000);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Request notification permission when the page loads
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                } else {
+                    console.error('Notification permission denied.');
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
