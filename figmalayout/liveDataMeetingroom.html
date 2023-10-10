@@ -87,21 +87,7 @@
             max-width: 1000px;
             height: 500px !important;
         }
-        .line-chart-container {
-            text-align: center;
-            margin-top: 20px;
-            margin-right: 500px;
-            max-width: 1000px;
-            height: 500px !important;
-        }
-    
-        .line-chart-container {
-            text-align: center;
-            margin-top: 20px;
-            margin-right: 500px;
-            max-width: 1000px;
-            height: 500px !important;
-        }
+
 
         /* Mobile Styles */
         @media (max-width: 768px) {
@@ -179,10 +165,9 @@
 
 <!-- Container for Line Charts (Last 6 Hours) -->
 <div class="dashboard-container">
-    <div>
-        <h2>Live Data in Line Charts</h2>
-    </div>
-    
+
+    <h2>Live Data in Line Charts</h2>
+
     <!-- Canvas for Temperature Line Chart -->
     <div class="line-chart-container">
         <canvas id="temperature-line-chart" width="800" height="400"></canvas>
@@ -379,11 +364,6 @@
     }
 
     // Room IDs and location names for the Meetingroom
-    const roomIds = ['13', '17']; // Replace with the IDs of the Meetingroom rooms
-    const locationNames = [
-    'uolle 1 meeting room',
-    'Linno 1 ja 2 neuvottelutila'
-    ]; // Replace with the corresponding room names
 
     // Update data and charts at regular intervals
     async function updateDataAndCharts() {
